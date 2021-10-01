@@ -5,8 +5,14 @@ import '../styles/repositories.scss';
 
 // https://api.github.com/orgs/rocketseat/repos
 
+interface Repository {
+  name: string;
+  description: string;
+  html_url: string;
+}
+
 export function RepositoryList() {
-  const [repositories, setRepositires] = useState([]);
+  const [repositories, setRepositires] = useState<Repository[]>([]);
 
   useEffect(() => {
     //dispara uma função quando algo mudar dentro da aplicação
