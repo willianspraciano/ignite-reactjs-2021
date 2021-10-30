@@ -67,6 +67,7 @@ export const GlobalStyle = createGlobalStyle`
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-y: scroll;
   }
 
   .react-modal-content {
@@ -75,7 +76,9 @@ export const GlobalStyle = createGlobalStyle`
     background: var(--background);
     padding: 3rem;
     position: relative;
-    border-radius: 0.25rem
+    border-radius: 0.25rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   .react-modal-close {
@@ -90,5 +93,8 @@ export const GlobalStyle = createGlobalStyle`
     &:hover {
       filter: brightness(0.8);
     }
+  }
+  .ReactModal__Body--open {
+    overflow: hidden;
   }
 `;

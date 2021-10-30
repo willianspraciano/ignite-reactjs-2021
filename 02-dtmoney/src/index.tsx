@@ -27,6 +27,22 @@ createServer({
           amount: 1100,
           createdAt: new Date('2021-02-14 11:00:00'),
         },
+        {
+          id: 3,
+          title: 'Aluguel',
+          type: 'withdraw',
+          category: 'Casa',
+          amount: 1100,
+          createdAt: new Date('2021-02-14 11:00:00'),
+        },
+        {
+          id: 4,
+          title: 'Aluguel',
+          type: 'withdraw',
+          category: 'Casa',
+          amount: 1100,
+          createdAt: new Date('2021-02-14 11:00:00'),
+        },
       ],
     });
   },
