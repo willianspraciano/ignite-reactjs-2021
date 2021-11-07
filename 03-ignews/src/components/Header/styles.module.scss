@@ -1,0 +1,59 @@
+.headerContainer {
+  height: 5rem;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.headerContent {
+  max-width: 1120px;
+  height: 5rem;
+  margin: 0 auto; // alinha ao centro horizontalmente
+  padding: 0 2rem; // dá um espaço nas laterais caso a tela seja diminuída a menos de 1120px
+
+  display: flex;
+  align-items: center;
+
+  nav {
+    margin-left: 5rem;
+    height: 5rem;
+
+    a {
+      display: inline-block;
+      position: relative;
+      padding: 0 0.5rem;
+      height: 5rem;
+      line-height: 5rem;
+      color: var(--gray-300);
+
+      transition: color 0.2s;
+
+      // sempre que houver a configuração <a/>+<a/> essa opção aqui é aplicada no segundo <a/>
+      & + a { 
+        margin-left: 2rem;
+      }
+
+      &:hover {
+        color: var(--white);
+      }
+
+      &.active{
+        color: var(--white);
+        font-weight: boa  ;
+      }
+
+      &.active::after {
+        content: '';
+        height: 3px;
+        border-radius: 3px 3px 0 0;
+        width: 100%;
+        position: absolute;
+        bottom: 1px;
+        left: 0;
+        background: var(--yellow-500);
+      }
+    }
+  }
+
+  button {
+    margin-left: auto; // da o máximo de margem possível par o botão
+  }
+}
