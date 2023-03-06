@@ -20,12 +20,12 @@ export default function Home({ product }: HomeProps) {
       </Head>
       <main className={styles.contentContainer}>
         <section className={styles.hero}>
-          <span> 👏 Hey, welcome</span>
+          <span>👏 Hey, welcome</span>
           <h1>
             News about the <span>React</span> world.
           </h1>
           <p>
-            Get acess to all the publications <br />
+            Get access to all the publications <br />
             <span>for {product.amount} month</span>
           </p>
           <SubscribeButton priceId={product.priceId} />
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async () => {
     priceId: price.id,
     amount: new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USd',
+      currency: 'USD',
     }).format(price.unit_amount / 100),
   };
 
