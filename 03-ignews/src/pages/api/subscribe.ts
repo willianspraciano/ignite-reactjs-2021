@@ -20,6 +20,7 @@ const subscribe = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await fauna.query<User>(
       q.Get(q.Match(q.Index('user_by_email'), q.Casefold(session.user.email)))
     );
+    console.log('USER: ', user);
 
     let customerId = user.data.stripe_customer_id;
 
@@ -28,6 +29,7 @@ const subscribe = async (req: NextApiRequest, res: NextApiResponse) => {
         email: session.user.email,
         // metadata
       });
+      console.log('STRIPE: ', stripeCustomer);
 
       await fauna.query(
         q.Update(q.Ref(q.Collection('users'), user.ref.id), {
