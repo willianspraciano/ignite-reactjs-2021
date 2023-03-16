@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { getPrismicClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 
 export default function Posts() {
@@ -32,4 +33,18 @@ export default function Posts() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const prismic = getPrismicClient();
+
+  const posts = await prismic.getByType('post', {
+    pageSize: 100,
+  });
+
+  console.log(JSON.stringify(posts, null, 2));
+
+  return {
+    props: { posts },
+  };
 }
