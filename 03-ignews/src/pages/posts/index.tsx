@@ -53,8 +53,9 @@ export async function getServerSideProps() {
       slug: post.uid,
       title: post.data.title,
       excerpt:
-        post.data.content.find((content) => content.type === 'paragraph')
-          ?.text ?? '',
+        post.data.content
+          .find((content) => content.type === 'paragraph')
+          ?.text?.slice(0, 250) + '...' ?? '',
       updatedAt: new Date(post.last_publication_date).toLocaleDateString(
         'pt-BR',
         {
