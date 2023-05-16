@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Button,
@@ -18,48 +16,20 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
 import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
-import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Pagination } from '@/components/Pagination';
-import { User } from '@/@types/User';
-import { api } from '@/services/api';
+import { useUsers } from '@/services/hooks/useUsers';
 
 export default function UserList() {
-  const { data, isLoading, isFetching, error } = useQuery({
-    queryKey: ['users'],
-    queryFn: async () => {
-      const { data } = await api.get('users');
-
-      const users: User[] = data.users.map((user: User) => {
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          }),
-        };
-      });
-
-      return users;
-    },
-    staleTime: 1000 * 5,
-  });
+  const { data, isLoading, isFetching, error } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
-
-  useEffect(() => {
-    fetch('http://localhost:3000/api/users')
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  }, []);
 
   return (
     <Box>
