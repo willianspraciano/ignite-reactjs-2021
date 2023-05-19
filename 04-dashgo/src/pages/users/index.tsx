@@ -22,9 +22,11 @@ import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
 import { Pagination } from '@/components/Pagination';
 import { useUsers } from '@/services/hooks/useUsers';
+import { useState } from 'react';
 
 export default function UserList() {
-  const { data, isLoading, isFetching, error } = useUsers();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isFetching, error } = useUsers(page);
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -81,7 +83,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.map((user) => (
+                  {data?.users?.map((user) => (
                     <Tr px="6" key={user.id}>
                       <Td px={['4', '4', '6']}>
                         <Checkbox colorScheme="pink" />
@@ -114,9 +116,9 @@ export default function UserList() {
               </Table>
 
               <Pagination
-                totalCountOfRegisters={200}
-                currentPage={4}
-                onPageChange={() => {}}
+                totalCountOfRegisters={data?.totalCount || 1}
+                currentPage={page}
+                onPageChange={setPage}
               />
             </>
           )}
