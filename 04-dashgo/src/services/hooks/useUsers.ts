@@ -36,6 +36,6 @@ export function useUsers(page: number) {
   return useQuery({
     queryKey: ['users', page],
     queryFn: () => getUsers(page),
-    staleTime: 1000 * 5,
+    staleTime: 1000 * 60 * 10, // 10 minutos
   });
 }
