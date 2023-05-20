@@ -1,4 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import {
+  UseQueryOptions,
+  UseQueryResult,
+  useQuery,
+} from '@tanstack/react-query';
 import { User } from '@/@types/User';
 import { api } from '../api';
 
@@ -32,10 +36,11 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
   return { users, totalCount };
 }
 
-export function useUsers(page: number) {
+export function useUsers(page: number, options: UseQueryOptions) {
   return useQuery({
     queryKey: ['users', page],
     queryFn: () => getUsers(page),
     staleTime: 1000 * 60 * 10, // 10 minutos
-  });
+    ...options,
+  }) as UseQueryResult<GetUsersResponse, unknown>;
 }

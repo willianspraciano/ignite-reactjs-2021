@@ -18,18 +18,29 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { GetServerSideProps } from 'next';
 
 import { Header } from '@/components/Header';
 import { Sidebar } from '@/components/Sidebar';
 import { Pagination } from '@/components/Pagination';
-import { useUsers } from '@/services/hooks/useUsers';
+import { getUsers, useUsers } from '@/services/hooks/useUsers';
 import { useState } from 'react';
 import { queryClient } from '@/services/queryClient';
 import { api } from '@/services/api';
+import { User } from '@/@types/User';
 
-export default function UserList() {
+interface IProps {
+  users: User[];
+  totalCount: number;
+}
+
+export default function UserList(props: IProps) {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isFetching, error } = useUsers(page);
+
+  const initialData = !!props.totalCount ? props : undefined;
+  const { data, isLoading, isFetching, error } = useUsers(page, {
+    initialData,
+  });
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -147,3 +158,17 @@ export default function UserList() {
     </Box>
   );
 }
+
+/*
+// Este é somente um exemplo de como fazer a integração do ReactQuery com SSR
+// Não vai funcionar porque a API feita no Miragejs só funciona do lado do cliente
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount } = await getUsers(1);
+  return {
+    props: {
+      users,
+      totalCount,
+    },
+  };
+};
+*/
