@@ -1,4 +1,5 @@
 import { api } from '@/services/api';
+import Router from 'next/router';
 import { ReactNode, createContext, useState } from 'react';
 
 type User = {
@@ -14,6 +15,7 @@ type SignInCredentials = {
 
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>;
+  user: User;
   isAuthenticated: boolean;
 };
 
@@ -25,7 +27,7 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
-  const isAuthenticated = false;
+  const isAuthenticated = !!user?.email;
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -34,14 +36,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
-      console.log(response.data);
+      const { token, refreshToken, permissions, roles } = response.data;
+
+      setUser({
+        email,
+        permissions,
+        roles,
+      });
+
+      Router.push('/dashboard');
     } catch (err) {
       console.log(err);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated }}>
+    <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
       {children}
     </AuthContext.Provider>
   );
