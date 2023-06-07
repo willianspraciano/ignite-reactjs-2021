@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import styles from '../styles/home.module.scss';
 import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,3 +36,20 @@ export default function Home() {
     </form>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx);
+
+  if (cookies['nextauth.token']) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
