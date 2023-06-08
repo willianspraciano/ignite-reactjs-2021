@@ -1,8 +1,9 @@
+import { useContext, useEffect } from 'react';
+
 import { AuthContext } from '@/contexts/AuthContext';
 import { setupAPIClient } from '@/services/api';
 import { api } from '@/services/apiClient';
 import { withSSRAuth } from '@/utils/withSSRAuth';
-import { useContext, useEffect } from 'react';
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
