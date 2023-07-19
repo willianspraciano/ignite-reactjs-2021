@@ -16,7 +16,8 @@ type SignInCredentials = {
 };
 
 type AuthContextData = {
-  signIn(credentials: SignInCredentials): Promise<void>;
+  signOut: () => void;
+  signIn: (credentials: SignInCredentials) => Promise<void>;
   user: User;
   isAuthenticated: boolean;
 };
@@ -25,13 +26,18 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
+export const TOKEN_KEY = 'nextauth.token';
+export const REFRESH_KEY = 'nextauth.refreshToken';
+
 export const AuthContext = createContext({} as AuthContextData);
 
-export function signOut() {
-  destroyCookie(undefined, 'nextauth.token');
-  destroyCookie(undefined, 'nextauth.refreshToken');
+let authChanel: BroadcastChannel;
 
-  Router.push('/');
+export function signOut() {
+  destroyCookie(undefined, TOKEN_KEY);
+  destroyCookie(undefined, REFRESH_KEY);
+
+  authChanel.postMessage('signOut');
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -39,7 +45,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user?.email;
 
   useEffect(() => {
-    const { 'nextauth.token': token } = parseCookies();
+    authChanel = new BroadcastChannel('auth');
+    authChanel.onmessage = (message) => {
+      switch (message.data) {
+        case 'signOut':
+          Router.push('/');
+          break;
+        default:
+          break;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const { [TOKEN_KEY]: token } = parseCookies();
 
     if (token) {
       api
@@ -63,12 +82,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const { token, refreshToken, permissions, roles } = response.data;
 
-      setCookie(undefined, 'nextauth.token', token, {
+      setCookie(undefined, TOKEN_KEY, token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
         path: '/',
       });
 
-      setCookie(undefined, 'nextauth.refreshToken', refreshToken, {
+      setCookie(undefined, REFRESH_KEY, refreshToken, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
         path: '/',
       });
@@ -88,7 +107,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
+    <AuthContext.Provider value={{ signOut, signIn, isAuthenticated, user }}>
       {children}
     </AuthContext.Provider>
   );

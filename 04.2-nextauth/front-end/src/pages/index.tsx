@@ -3,8 +3,6 @@ import { Inter } from 'next/font/google';
 import styles from '../styles/home.module.scss';
 import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
-import { GetServerSideProps } from 'next';
-import { parseCookies } from 'nookies';
 import { withSSRGuest } from '@/utils/withSSRGuest';
 
 const inter = Inter({ subsets: ['latin'] });
